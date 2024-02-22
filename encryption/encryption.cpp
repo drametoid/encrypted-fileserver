@@ -3,9 +3,6 @@
 * and can only be decrypted by the middleware when accessed by an authenticated user.
 */
 
-#ifndef FILESERVER_ENCRYPTION_CPP
-#define FILESERVER_ENCRYPTION_CPP
-
 #include "encryption.h"
 
 void Encryption::handleErrors(const std::string& message) {
@@ -108,5 +105,3 @@ std::string Encryption::decryptFile(const std::string& filePath, const std::vect
 
     return std::string(decryptedText.begin(), decryptedText.begin() + plaintextLen);
 }
-
-#endif // FILESERVER_ENCRYPTION_CPP
