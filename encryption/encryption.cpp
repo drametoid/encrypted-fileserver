@@ -103,5 +103,12 @@ std::string Encryption::decryptFile(const std::string& filePath, const std::vect
 
     EVP_CIPHER_CTX_free(ctx);
 
-    return std::string(decryptedText.begin(), decryptedText.begin() + plaintextLen);
+    std::string ptOutput(decryptedText.begin(), decryptedText.begin() + plaintextLen);
+
+    // Fix: Delete first character if it's a space
+    if (!ptOutput.empty() && ptOutput[0] == ' ') {
+        ptOutput.erase(0, 1);
+    }
+
+    return ptOutput;
 }
