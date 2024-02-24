@@ -3,8 +3,8 @@
 #ifndef FILESERVER_USER_MANAGEMENT_H
 #define FILESERVER_USER_MANAGEMENT_H
 
-#include "../encryption/encryption.h"
-#include "../helpers/helper_functions.h"
+#include "encryption/encryption.h"
+#include "helpers/helper_functions.h"
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -14,7 +14,7 @@
 
 using namespace std;
 
-enum User_type { admin, user };
+enum UserType { admin, user };
 
 /// Add a user to the system
 /// \param userName     The username to add
