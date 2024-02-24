@@ -1,22 +1,56 @@
-/*
-* The core middleware component: Acts as the interface between users and the encrypted file system. 
-* It interprets commands and performs actions such as file and directory operations within an encrypted environment.
-*/
-
 #include <iostream>
 #include <fstream>
+#include <sys/stat.h>
 #include <filesystem>
-#include <string>
-#include "helpers/json.hpp"
+
+#include "encryption/encryption.h"
+#include "file_operations/user_features.h"
+#include "user_management/user_management.h"
 
 namespace fs = std::filesystem;
 
 int main(int argc, char *argv[]) {
+  std::string filesystemPath = fs::current_path();
+
+  if(fs::exists("filesystem")) {
     if(argc != 2) {
-        std::cerr << "\nKeyfile for authentication missing or incorrectly provided.\n" 
-                << "Usage: ./fileserver keyfile_name\n" << std::endl;
+      std::cout << "Invalid keyfile\n" << std::endl;
+      return 1;
+    } 
+    else {
+      std::string keyFileName = argv[1];
+      std::string userName = getTypeOfUser(keyFileName);
+      UserType userType;
+      if(userName == "admin")
+          userType = admin;
+      else
+          userType = user;
+
+      userFeatures(userName, userType, readEncKeyFromMetadata(userName, ""), filesystemPath);
+    }
+  } 
+  else {
+    if(!createDirectory("public_keys") ||
+      !createDirectory("private_keys") ||
+      !createDirectory("metadata") ||
+      !createDirectory("shared_files") ||
+      !createDirectory("filesystem")) {
         return 1;
     }
 
-    return 0;
+    std::string metadataPath = "metadata/metadata.json";
+    std::ofstream metadataFile(metadataPath);
+    if (metadataFile) {
+        metadataFile << "{\"test\":\"123\"}";
+        metadataFile.close();
+    } 
+    else {
+        std::cerr << "Error creating metadata.json\n" << std::endl;
+        return 1;
+    }
+
+    std::string userName = "admin";
+    addUser(userName, filesystemPath, true);
+    userFeatures(userName, UserType::admin, readEncKeyFromMetadata(userName, ""), filesystemPath);
+  }
 }

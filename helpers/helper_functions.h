@@ -1,7 +1,7 @@
 #ifndef HELPER_FUNCTIONS_H
 #define HELPER_FUNCTIONS_H
 
-#include "../encryption/encryption.h"
+#include "encryption/encryption.h"
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
@@ -12,10 +12,27 @@
 #include <string>
 #include <unistd.h>
 
-#include "../encryption/randomizer_function.h"
+#include "encryption/randomizer_function.h"
 
 using namespace std;
 namespace fs = std::filesystem;
+
+using std::string;
+
+bool createDirectory(const fs::path& path) {
+    std::error_code ec; // For error handling without exceptions
+    if (fs::create_directory(path, ec)) {
+        return true; // Directory created successfully
+    } else {
+        if (ec) { // Check if error code is set
+            std::cerr << "Error creating directory: " << ec.message() << " (" << path << ")" << std::endl;
+            return false;
+        } else {
+            std::cerr << "Directory already exists: " << path << std::endl;
+            return true;
+        }
+    }
+}
 
 /// Normalize a path by removing trailing slashes and collapsing consecutive slashes to a single slash
 /// \param path The path to normalize
@@ -121,7 +138,5 @@ void createInitFsForUser(string username, string path) {
     }
     umask(old_umask); // Restore the original umask value
 }
-
-
 
 #endif
