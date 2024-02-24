@@ -12,7 +12,8 @@ if ( OPENSSL_FOUND )
     message(STATUS "OpenSSL Libraries: ${OPENSSL_LIBRARIES}")
 endif()
 
-set(INCLUDE_DIRS 
+set(INCLUDE_DIRS
+    ${CMAKE_CURRENT_SOURCE_DIR}
     encryption
     file_operations
     helpers
@@ -20,7 +21,6 @@ set(INCLUDE_DIRS
     )
 
 set(HEADERS
-    encryption/enc_consts.h
     encryption/encryption.h
     encryption/randomizer_function.h
     

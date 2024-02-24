@@ -1,7 +1,11 @@
-# encrypted-fileserver
-Building an encrypted fileserver for learnings on Secure System Design
+## Running the program Locally
 
-# Running Locally
-For now, use your local C++ toolchain (g++) in my case:
-`g++ -std=c++17 -o fileserver main.cpp -L/usr/local/opt/openssl@3/lib -I/usr/local/opt/openssl@3/include -lssl -lcrypto`
-Replace `/usr/local/opt/openssl@3` with the path of your devel openssl package in your system.
+To create executable named `fileserver`, run the following command:
+`g++ -std=c++17 -o fileserver main.cpp -L<path_to_openssl>/lib -I<path_to_openssl>/include -lssl -lcrypto`
+for macOS it might be: `/usr/local/opt/openssl@3`
+
+- To execute the program, enter `./fileserver keyfile_name` in the cli.
+
+- You can even run it using Docker
+  1. docker build -t fileserver .
+  2. docker run -it --name fileserver-container fileserver:latest /bin/bash
